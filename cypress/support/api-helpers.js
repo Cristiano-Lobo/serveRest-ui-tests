@@ -34,18 +34,19 @@ export const loginAndGetToken = ({ email, password }) => {
   }).then((resp) => {
     // resp.body.authorization costuma vir como "Bearer xxx"
     const token = resp.body.authorization || ''
-    return { token }
-  })
-
+      return { token }
+    })
+  }
+  
   export const registerProduct = ({ email, password }) => {
-  return cy.request({
-    method: 'POST',
-    url: `${API}/login`,
-    body: { email, password },
-    failOnStatusCode: false
-  }).then((resp) => {
-    // resp.body.authorization costuma vir como "Bearer xxx"
-    const token = resp.body.authorization || ''
-    return { token }
-  })
-}
+    return cy.request({
+      method: 'POST',
+      url: `${API}/login`,
+      body: { email, password },
+      failOnStatusCode: false
+    }).then((resp) => {
+      // resp.body.authorization costuma vir como "Bearer xxx"
+      const token = resp.body.authorization || ''
+      return { token }
+    })
+  }

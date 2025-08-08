@@ -1,0 +1,43 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*.local
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# macOS system files
+.DS_Store
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+logs/
+*.log
+
+# Coverage
+coverage/
+*.lcov
+
+# OS generated files
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+
+# Optional lock files (descomente se quiser ignorar)
+# package-lock.json
+# yarn.lock

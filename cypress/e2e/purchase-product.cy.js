@@ -14,8 +14,9 @@ describe('Purchasing product', () => {
   });
 
   it('Add product to shopping list', () => {
-    purchasePage.searchProducts(product.name);
-    purchasePage.addProductToList(product.name);
-    cy.contains(product.name).should('be.visible');
+    purchasePage.searchProducts(product.nome);
+    purchasePage.addProductToList(product.nome);
+    cy.contains(product.nome).should('be.visible');
+    cy.contains('Lista de Compras').should('be.visible');
   });
 });

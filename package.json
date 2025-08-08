@@ -1,0 +1,16 @@
+{
+  "name": "serverest-ui-tests",
+  "version": "1.0.0",
+  "description": "Automação e2e do produto serverRest",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress open",
+    "teste:headless": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^14.5.3"
+  }
+}

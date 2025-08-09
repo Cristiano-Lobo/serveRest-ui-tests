@@ -1,6 +1,6 @@
 // cypress/e2e/purchase-product.cy.js
 import product from '../fixtures/product.json';
-import { purchasePage } from './page-objects/purchase-product'; // mantém seus POs de tela
+import { purchasePage } from './page-objects/purchase-product';
 
 describe('Purchasing product', () => {
   before(() => {

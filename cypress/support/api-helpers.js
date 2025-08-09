@@ -1,52 +1,36 @@
-// Gera e-mail único
-export const genEmail = (prefix = 'qa') =>
-  `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,7)}@example.com`
+// cypress/support/api-helpers.js
+const API_BASE = Cypress.env('API_BASE') || 'https://serverest.dev';
 
-const API = 'https://serverest.dev' // evite depender do baseUrl do front
-
-export const createUser = ({ admin = true, email, password, nome } = {}) => {
-  const _email = email || genEmail('serverest')
-  const _password = password || 'Lobo@123'
-  const _nome = nome || 'QA Serverest'
+export function api(method, path, options = {}) {
+  const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
+  const token = Cypress.env('DEFAULT_TOKEN');
 
   return cy.request({
-    method: 'POST',
-    url: `${API}/usuarios`,
-    body: {
-      nome: _nome,
-      email: _email,
-      password: _password,
-      administrador: admin ? 'true' : 'false'
-    },
-    failOnStatusCode: false
-  }).then((resp) => {
-    // resp.body: { message, _id } quando sucesso
-    return { id: resp.body._id, email: _email, password: _password, admin }
-  })
+    method,
+    url,
+    ...options, // body, qs, headers...
+    headers: { ...(token ? { Authorization: token } : {}), ...(options.headers || {}) },
+  });
 }
 
-export const loginAndGetToken = ({ email, password }) => {
-  return cy.request({
-    method: 'POST',
-    url: `${API}/login`,
-    body: { email, password },
-    failOnStatusCode: false
-  }).then((resp) => {
-    // resp.body.authorization costuma vir como "Bearer xxx"
-    const token = resp.body.authorization || ''
-      return { token }
-    })
-  }
-  
-  export const registerProduct = ({ email, password }) => {
-    return cy.request({
-      method: 'POST',
-      url: `${API}/login`,
-      body: { email, password },
-      failOnStatusCode: false
-    }).then((resp) => {
-      // resp.body.authorization costuma vir como "Bearer xxx"
-      const token = resp.body.authorization || ''
-      return { token }
-    })
-  }
+export function createUser({ admin = true, nome = 'User QA' } = {}) {
+  const t = Date.now();
+  const payload = {
+    nome,
+    email: `user_${t}@test.com`,
+    password: '123456',
+    administrador: String(admin),
+  };
+
+  return api('POST', '/usuarios', { body: payload }).then((res) => {
+    expect(res.status).to.eq(201);
+    return { email: payload.email, password: payload.password, id: res.body._id };
+  });
+}
+
+export function loginAndGetToken({ email, password }) {
+  return api('POST', '/login', { body: { email, password } }).then((res) => {
+    expect(res.status).to.eq(200);
+    return { token: res.body.authorization };
+  });
+}

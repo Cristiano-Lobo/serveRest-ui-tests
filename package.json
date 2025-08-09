@@ -4,11 +4,11 @@
   "description": "Automação e2e do produto serverRest",
   "main": "index.js",
   "scripts": {
-    "test": "cypress open",
+    "test-ui": "cypress open",
     "teste:headless": "cypress run"
   },
   "keywords": [],
-  "author": "",
+  "author": "Cristiano Lobo",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^14.5.3"

@@ -1,6 +1,6 @@
 # ServeRest UI Tests
 
-Este projeto contém a automação de testes **End-to-End (E2E)** da aplicação **ServeRest**, utilizando o framework [Cypress](https://www.cypress.io/) para execução e [Page Objects](https://martinfowler.com/bliki/PageObject.html) para organização dos cenários.
+Este projeto contém a automação de testes **End-to-End (E2E)** da aplicação **ServeRest**, utilizando o framework [Cypress](https://www.cypress.io/) para execução e [Page Objects] para organização dos cenários.
 
 ## 📌 Visão geral
 
@@ -17,6 +17,7 @@ A arquitetura foi planejada para:
 
 ## 📂 Estrutura de pastas
 
+```bash
 serveRest-ui-tests/
 ├── cypress.config.js # Configuração principal do Cypress
 ├── package.json # Dependências e scripts do projeto
@@ -35,6 +36,7 @@ serveRest-ui-tests/
 ├── api-helpers.js # Funções para comunicação com a API
 ├── commands.js # Comandos customizados do Cypress
 └── e2e.js # Configuração global dos testes E2E
+```
 
 ## 🏗 Arquitetura
 
@@ -58,7 +60,14 @@ npm install
 # ou
 yarn install
 
+```
+
+### Execução no modo (GUI) ou headless
+
+```
+#Executar os testes em modo interface (GUI):
 npx cypress open
 
+#Executar os testes em modo headless:
 npx cypress run
 ```

@@ -1,16 +1,10 @@
 // cypress/support/api-helpers.js
 const API_BASE = Cypress.env('API_BASE') || 'https://serverest.dev';
+const DEFAULT_PASSWORD = Cypress.env('DEFAULT_PASSWORD');
 
 export function api(method, path, options = {}) {
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
-  const token = Cypress.env('DEFAULT_TOKEN');
-
-  return cy.request({
-    method,
-    url,
-    ...options, // body, qs, headers...
-    headers: { ...(token ? { Authorization: token } : {}), ...(options.headers || {}) },
-  });
+  return cy.request({ method, url, ...options });
 }
 
 export function createUser({ admin = true, nome = 'User QA' } = {}) {
@@ -18,19 +12,49 @@ export function createUser({ admin = true, nome = 'User QA' } = {}) {
   const payload = {
     nome,
     email: `user_${t}@test.com`,
-    password: '123456',
+    password: DEFAULT_PASSWORD,
     administrador: String(admin),
   };
 
   return api('POST', '/usuarios', { body: payload }).then((res) => {
     expect(res.status).to.eq(201);
-    return { email: payload.email, password: payload.password, id: res.body._id };
+    return { id: res.body._id, email: payload.email, password: payload.password, admin };
   });
 }
 
-export function loginAndGetToken({ email, password }) {
+export function loginUser({ email, password }) {
   return api('POST', '/login', { body: { email, password } }).then((res) => {
     expect(res.status).to.eq(200);
     return { token: res.body.authorization };
+  });
+}
+
+export function createProductWithAdmin(fixtureName = 'product') {
+  return createUser({ admin: true }).then(({ email, password }) =>
+    loginUser({ email, password }).then(({ token }) =>
+      cy.fixture(fixtureName).then((product) => {
+        const model = Date.now();
+        return api('POST', '/produtos', {
+          headers: { Authorization: token },
+          body: {
+            nome: `${product.nome} - ${model}`,
+            preco: product.preco,
+            descricao: product.descricao,
+            quantidade: product.quantidade,
+          },
+        }).then((res) => {
+          expect(res.status).to.eq(201);
+          return { id: res.body._id, nome: `${product.nome} - ${model}`, token };
+        });
+      })
+    )
+  );
+}
+
+export function deleteProduct(productId, token) {
+  return api('DELETE', `/produtos/${productId}`, {
+    headers: { Authorization: token }
+  }).then((res) => {
+    expect(res.status).to.eq(200);
   });
 }

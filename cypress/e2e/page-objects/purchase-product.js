@@ -11,7 +11,7 @@ export const purchasePage = {
         cy.get('button[data-testid="botaoPesquisar"]').click()
     },
 
-    addProductToList(productName) {
+    addProductToList() {
         cy.get('button[data-testid="adicionarNaLista"]').click()
     }
 }

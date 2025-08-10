@@ -1,4 +1,4 @@
-import { createUser, loginAndGetToken } from './api-helpers';
+import { createUser, loginUser } from './api-helpers';
 
 Cypress.Commands.add('provisionUser', ({ admin = true, alias = 'DEFAULT' } = {}) => {
   return createUser({ admin }).then(({ email, password, id }) => {
@@ -12,10 +12,11 @@ Cypress.Commands.add('provisionUser', ({ admin = true, alias = 'DEFAULT' } = {})
 Cypress.Commands.add('getToken', (alias = 'DEFAULT') => {
   const email = Cypress.env(`${alias}_USERNAME`);
   const password = Cypress.env(`${alias}_PASSWORD`);
+  expect(email, `${alias}_USERNAME`).to.be.a('string').and.not.be.empty;
+  expect(password, `${alias}_PASSWORD`).to.be.a('string').and.not.be.empty;
 
-  return loginAndGetToken({ email, password }).then(({ token }) => {
+  return loginUser({ email, password }).then(({ token }) => {
     Cypress.env(`${alias}_TOKEN`, token);
-    Cypress.env('DEFAULT_TOKEN', token); // token padrão para api-helpers
     return token;
   });
 });
@@ -26,9 +27,9 @@ Cypress.Commands.add('loginUI', (email, password) => {
   cy.get('input[data-testid="senha"]').clear().type(password);
   cy.get('button[data-testid="entrar"]').click();
   cy.contains('Serverest Store', { timeout: 15000 }).should('be.visible');
+
 });
 
-// Login pela interface usando cache de sessão
 Cypress.Commands.add('loginUIOnce', (email, password) => {
   cy.session([email, password], () => {
     cy.loginUI(email, password);

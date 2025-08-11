@@ -1,6 +1,9 @@
-// cypress/support/api-helpers.js
-const API_BASE = Cypress.env('API_BASE') || 'https://serverest.dev';
-const DEFAULT_PASSWORD = Cypress.env('DEFAULT_PASSWORD');
+const API_BASE = Cypress.env('API_BASE');
+const DEFAULT_PASSWORD = Cypress.env('API_PASSWORD');
+
+if (!API_BASE || !DEFAULT_PASSWORD) {
+  throw new Error('API_BASE e/ou API_PASSWORD não definidos (use cypress.env.json).');
+}
 
 export function api(method, path, options = {}) {
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;

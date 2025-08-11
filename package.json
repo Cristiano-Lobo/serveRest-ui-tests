@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test-ui": "cypress open",
-    "teste:headless": "cypress run"
+    "test:headless": "cypress run"
   },
   "keywords": [],
   "author": "Cristiano Lobo",
